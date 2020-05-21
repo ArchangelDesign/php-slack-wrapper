@@ -1,0 +1,17 @@
+{
+    "name": "raffmartinez/php-slack-wrapper",
+    "version": "0.1.0",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Raff Martinez-Marjanski",
+            "email": "archangel.raffael@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "RaffMartinez\\Slack": "src/"
+        }
+    },
+    "require": {}
+}
