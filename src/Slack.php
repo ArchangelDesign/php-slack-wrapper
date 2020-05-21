@@ -17,4 +17,12 @@ class Slack
     {
         $this->apiKey = $apiKey;
     }
+
+    public function getChannelList() {}
+
+    public function getUserList() {}
+
+    public function getUserInfo() {}
+
+    public function postMessage() {}
 }
