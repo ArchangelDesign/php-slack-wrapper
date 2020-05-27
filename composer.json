@@ -13,8 +13,16 @@
             "RaffMartinez\\Slack\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "RaffMartinez\\Slack\\Test\\": "tests/"
+        }
+    },
     "require": {
         "guzzlehttp/guzzle": "6.5.4",
         "ext-json": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^7.5"
     }
 }
