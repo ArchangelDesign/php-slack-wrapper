@@ -3,6 +3,7 @@
 namespace RaffMartinez\Slack\Test;
 
 use PHPUnit\Framework\TestCase;
+use RaffMartinez\Slack\Channel;
 use RaffMartinez\Slack\Slack;
 
 class NetworkLayerTest extends TestCase
@@ -19,5 +20,7 @@ class NetworkLayerTest extends TestCase
         $this->assertArrayHasKey('channels', $lastResponse);
         $this->assertNotEmpty($lastResponse['channels']);
         $this->assertIsArray($list);
+        $firstChannel = array_shift($list);
+        $this->assertInstanceOf(Channel::class, $firstChannel);
     }
 }
