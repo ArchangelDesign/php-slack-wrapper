@@ -28,6 +28,10 @@ abstract class SlackNetworkClient
      */
     private $lastResponseBody;
 
+    private $defaultOptions = [
+        'verify' => false
+    ];
+
     /**
      * @var null|array
      */
@@ -36,7 +40,7 @@ abstract class SlackNetworkClient
     private function getClient(): Client
     {
         if (is_null($this->client)) {
-            $this->client = new Client();
+            $this->client = new Client(['defaults' => $this->defaultOptions]);
         }
 
         return $this->client;
