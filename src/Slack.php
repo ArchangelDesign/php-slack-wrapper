@@ -6,19 +6,17 @@ namespace RaffMartinez\Slack;
  * Class Slack
  * @package RaffMartinez\Slack
  */
-class Slack
+class Slack extends SlackNetworkClient
 {
-    /**
-     * @var string|null
-     */
-    private $apiKey;
 
     public function __construct(string $apiKey)
     {
         $this->apiKey = $apiKey;
     }
 
-    public function getChannelList() {}
+    public function getChannelList() {
+        return json_decode($this->get('conversations.list'), true);
+    }
 
     public function getUserList() {}
 

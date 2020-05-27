@@ -10,8 +10,11 @@
     ],
     "autoload": {
         "psr-4": {
-            "RaffMartinez\\Slack": "src/"
+            "RaffMartinez\\Slack\\": "src/"
         }
     },
-    "require": {}
+    "require": {
+        "guzzlehttp/guzzle": "6.5.4",
+        "ext-json": "*"
+    }
 }
