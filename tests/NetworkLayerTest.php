@@ -35,7 +35,7 @@ class NetworkLayerTest extends TestCase
         $this->assertInstanceOf(Channel::class, $firstChannel);
     }
 
-    public function testBotsInfo()
+    public function testGetBotsInfo()
     {
         $slack = new Slack(getenv('api-token'));
         $response = $slack->getBotsInfo('');
@@ -58,12 +58,24 @@ class NetworkLayerTest extends TestCase
         $slack->postMessage($channels[3], Message::responseMessage('The response', 'test', $ts));
     }
 
-    public function testUserList()
+    public function testGetUserList()
     {
         $slack = new Slack(getenv('api-token'));
         $users = $slack->getUserList();
         $this->assertIsArray($users);
         $this->assertNotEmpty($users);
         $this->assertInstanceOf(User::class, $users[0]);
+    }
+
+    public function testGetUserInfo()
+    {
+        $slack = new Slack(getenv('api-token'));
+        /** @var User $user */
+        $user = $slack->getUserList()[0];
+        $res = $slack->getUserInfo($user->getId());
+        $this->assertIsArray($res);
+        $this->assertEquals(true, $res['ok']);
+        $this->assertIsArray($res['user']);
+        $this->assertEquals($user->getId(), $res['user']['id']);
     }
 }

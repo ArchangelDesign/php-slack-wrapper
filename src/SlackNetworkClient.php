@@ -92,7 +92,7 @@ abstract class SlackNetworkClient
     protected function get(string $endpoint, $args = [])
     {
         $this->lastEndpoint = $endpoint;
-        $response = $this->getClient()->get($endpoint, array_merge($args, $this->getRequestOptions()));
+        $response = $this->getClient()->get($endpoint, array_merge(['query' => $args], $this->getRequestOptions()));
 
         return $this->handleSlackResponse($response);
     }

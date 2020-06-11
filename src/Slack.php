@@ -49,7 +49,9 @@ class Slack extends SlackNetworkClient
         return $members;
     }
 
-    public function getUserInfo() {}
+    public function getUserInfo(string $user) {
+        return $this->get('users.info', ['user' => $user]);
+    }
 
     public function postMessage(Channel $channel, Message $message) {
         $args = $message->getMessage();
