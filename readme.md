@@ -15,8 +15,8 @@ $channelList = $slack->getChannelList();
 ```
 #### Post message
 ```php
-$response =$slack->postMessage($channelList[0], \RaffMartinez\Slack\Message::simpleMessage('Hello', 'MyBot'));
-$ts = $response['ts'];
+$slack->postMessage($channelList[0], \RaffMartinez\Slack\Message::simpleMessage('Hello', 'MyBot'));
+$ts = $slack->getLastMessageTs();
 ```
 
 #### Reply to message
