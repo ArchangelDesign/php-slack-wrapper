@@ -5,6 +5,7 @@ namespace RaffMartinez\Slack;
 
 
 use GuzzleHttp\Client;
+use Psr\Http\Message\ResponseInterface;
 use RuntimeException;
 
 abstract class SlackNetworkClient
@@ -60,23 +61,30 @@ abstract class SlackNetworkClient
         return array_merge(['headers' => $this->defaultHeaders], $this->defaultOptions);
     }
 
-    protected function get(string $endpoint)
+    protected function get(string $endpoint, $args = [])
     {
-        $response = $this->getClient()->get($endpoint, $this->getRequestOptions());
-        $this->lastResponseCode = $response->getStatusCode();
-        $this->lastResponseBody = $response->getBody()->getContents();
-        $this->lastResponseHeaders = $response->getHeaders();
+        $response = $this->getClient()->get($endpoint, array_merge($args, $this->getRequestOptions()));
 
-        return $this->handleSlackResponse($this->lastResponseBody);
+        return $this->handleSlackResponse($response);
     }
 
-    private function handleSlackResponse(string $rawResponse)
+    protected function post(string $endpoint, array $arguments)
     {
-        $response = json_decode($rawResponse, true);
-        if ($response['ok'] === true) {
-            return $rawResponse;
+        $response = $this->getClient()->post($endpoint, array_merge($arguments, $this->getRequestOptions()));
+
+        return $this->handleSlackResponse($response);
+    }
+
+    private function handleSlackResponse(ResponseInterface $response)
+    {
+        $responseBody = json_decode($response->getBody()->getContents(), true);
+        $this->lastResponseCode = $response->getStatusCode();
+        $this->lastResponseBody = $responseBody;
+        $this->lastResponseHeaders = $response->getHeaders();
+        if ($responseBody['ok'] === true) {
+            return $responseBody;
         }
 
-        throw new RuntimeException('Slack Error: ' . $response['error']);
+        throw new RuntimeException('Slack Error: ' . $responseBody['error']);
     }
 }

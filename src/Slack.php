@@ -14,8 +14,8 @@ class Slack extends SlackNetworkClient
         $this->apiKey = $apiKey;
     }
 
-    public function getChannelList() {
-        $channels = json_decode($this->get('conversations.list'), true)['channels'];
+    public function getChannelList(): array {
+        $channels = $this->get('conversations.list')['channels'];
         $response = [];
 
         foreach ($channels as $c) {
@@ -25,11 +25,19 @@ class Slack extends SlackNetworkClient
         return $response;
     }
 
+    public function getBotsInfo(string $botId) {
+        return $this->get('bots.info', ['bot_id' => $botId]);
+    }
+
     public function getUserList() {}
 
     public function getUserInfo() {}
 
-    public function postMessage() {}
+    public function postMessage(Channel $channel, Message $message) {
+        $args = $message->getMessage();
+        $args['channel'] = $channel->getId();
+        return $this->post('chat.postMessage', $args);
+    }
 
     /**
      * @return int|null
@@ -42,7 +50,7 @@ class Slack extends SlackNetworkClient
     /**
      * @return string|null
      */
-    public function getLastResponseBody(): ?string
+    public function getLastResponseBody(): ?array
     {
         return $this->lastResponseBody;
     }
