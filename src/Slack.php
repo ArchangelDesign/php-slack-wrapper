@@ -1,4 +1,13 @@
 <?php
+/*
+ * PHP Slack Wrapper
+ *
+ * https://github.com/ArchangelDesign/php-slack-wrapper
+ * https://packagist.org/packages/raffmartinez/php-slack-wrapper
+ * license: MIT
+ * author: Raff Martinez-Marjanski
+ * date: May 2020
+ */
 
 namespace RaffMartinez\Slack;
 
@@ -8,7 +17,6 @@ namespace RaffMartinez\Slack;
  */
 class Slack extends SlackNetworkClient
 {
-
     private $lastTs = null;
 
     public function __construct(string $apiKey)
@@ -31,7 +39,15 @@ class Slack extends SlackNetworkClient
         return $this->get('bots.info', ['bot_id' => $botId]);
     }
 
-    public function getUserList() {}
+    public function getUserList() {
+        $response = $this->get('users.list');
+        $members = [];
+        foreach ($response['members'] as $member) {
+            $members[] = User::fromArray($member);
+        }
+
+        return $members;
+    }
 
     public function getUserInfo() {}
 

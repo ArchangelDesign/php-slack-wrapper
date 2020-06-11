@@ -1,5 +1,6 @@
 {
     "name": "raffmartinez/php-slack-wrapper",
+    "description":"Simple PHP Slack Wrapper for quick integration.",
     "version": "0.1.0",
     "license": "MIT",
     "authors": [

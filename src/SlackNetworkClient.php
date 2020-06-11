@@ -1,17 +1,34 @@
 <?php
-
+/*
+ * PHP Slack Wrapper
+ *
+ * https://github.com/ArchangelDesign/php-slack-wrapper
+ * https://packagist.org/packages/raffmartinez/php-slack-wrapper
+ * license: MIT
+ * author: Raff Martinez-Marjanski
+ * date: May 2020
+ */
 
 namespace RaffMartinez\Slack;
-
 
 use GuzzleHttp\Client;
 use Psr\Http\Message\ResponseInterface;
 use RuntimeException;
 
+/**
+ * Class SlackNetworkClient
+ * @package RaffMartinez\Slack
+ */
 abstract class SlackNetworkClient
 {
+    /**
+     * @var string
+     */
     protected $apiKey;
 
+    /**
+     * @var string
+     */
     private $baseUrl = 'https://slack.com/api/';
 
     /**
@@ -29,11 +46,22 @@ abstract class SlackNetworkClient
      */
     protected $lastResponseBody;
 
+    /**
+     * @var array
+     */
     private $defaultOptions = [
         'verify' => false
     ];
 
+    /**
+     * @var array
+     */
     private $defaultHeaders = [];
+
+    /**
+     * @var string|null
+     */
+    private $lastEndpoint;
 
     /**
      * @var null|array
@@ -63,6 +91,7 @@ abstract class SlackNetworkClient
 
     protected function get(string $endpoint, $args = [])
     {
+        $this->lastEndpoint = $endpoint;
         $response = $this->getClient()->get($endpoint, array_merge($args, $this->getRequestOptions()));
 
         return $this->handleSlackResponse($response);
@@ -70,6 +99,7 @@ abstract class SlackNetworkClient
 
     protected function post(string $endpoint, array $arguments)
     {
+        $this->lastEndpoint = $endpoint;
         $response = $this->getClient()
             ->post($endpoint, array_merge(['json' => $arguments], $this->getRequestOptions()));
 
@@ -86,6 +116,7 @@ abstract class SlackNetworkClient
             return $responseBody;
         }
 
-        throw new RuntimeException('Slack Error: ' . $responseBody['error']);
+        throw new RuntimeException('Slack Error: '
+            . $responseBody['error'] . ' calling endpoint: ' . $this->lastEndpoint);
     }
 }
