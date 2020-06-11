@@ -48,7 +48,8 @@ class NetworkLayerTest extends TestCase
     {
         $slack = new Slack(getenv('api-token'));
         $channels = $slack->getChannelList();
-        $res = $slack->postMessage($channels[3], Message::simpleMessage('The message', 'test'));
+        $c = $channels[3];
+        $res = $slack->postMessage($c, Message::simpleMessage('The message', 'test'));
         $this->assertIsArray($res);
         $this->assertEquals(true, $res['ok']);
         $this->assertIsArray($res['message']);
@@ -56,7 +57,9 @@ class NetworkLayerTest extends TestCase
         $this->assertEquals('The message', $res['message']['text']);
         $this->assertNotEmpty($res['ts']);
         $ts = $res['ts'];
-        $slack->postMessage($channels[3], Message::responseMessage('The response', 'test', $ts));
+        $subTs = $slack->postMessage($c, Message::responseMessage('The response', 'test', $ts))['ts'];
+        $slack->deleteMessage($c, $subTs);
+        $slack->deleteMessage($c, $ts);
     }
 
     public function testGetUserList()

@@ -62,6 +62,11 @@ class Slack extends SlackNetworkClient
         return Team::fromArray($response['team']);
     }
 
+    public function deleteMessage(Channel $channel, string $threadTs)
+    {
+        return $this->post('chat.delete', ['channel' => $channel->getId(), 'ts' => $threadTs]);
+    }
+
     public function postMessage(Channel $channel, Message $message) {
         $args = $message->getMessage();
         $args['channel'] = $channel->getId();
