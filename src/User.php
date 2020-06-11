@@ -35,6 +35,7 @@ class User
     private $updated;
     private $is_app_user;
     private $has_2fa;
+    private $profile;
 
     public static function fromArray(array $input): User
     {
@@ -45,6 +46,8 @@ class User
                 $i->$name = $value;
             }
         }
+
+        $i->profile = UserProfile::fromArray($input['profile']);
 
         return $i;
     }
