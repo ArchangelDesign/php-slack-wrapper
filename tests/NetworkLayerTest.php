@@ -15,6 +15,7 @@ use PHPUnit\Framework\TestCase;
 use RaffMartinez\Slack\Channel;
 use RaffMartinez\Slack\Message;
 use RaffMartinez\Slack\Slack;
+use RaffMartinez\Slack\Team;
 use RaffMartinez\Slack\User;
 
 class NetworkLayerTest extends TestCase
@@ -73,9 +74,17 @@ class NetworkLayerTest extends TestCase
         /** @var User $user */
         $user = $slack->getUserList()[0];
         $res = $slack->getUserInfo($user->getId());
-        $this->assertIsArray($res);
-        $this->assertEquals(true, $res['ok']);
-        $this->assertIsArray($res['user']);
-        $this->assertEquals($user->getId(), $res['user']['id']);
+        $this->assertInstanceOf(User::class, $res);
+        $this->assertEquals($user->getId(), $res->getId());
+    }
+
+    public function testGetTeamInfo()
+    {
+        $slack = new Slack(getenv('api-token'));
+        /** @var User $user */
+        $user = $slack->getUserList()[0];
+        $res = $slack->getTeamInfo($user->getProfile()->getTeam());
+        $this->assertInstanceOf(Team::class, $res);
+        $this->assertEquals($user->getTeamId(), $res->getId());
     }
 }

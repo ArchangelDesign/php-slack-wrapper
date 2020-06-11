@@ -35,6 +35,7 @@ class User
     private $updated;
     private $is_app_user;
     private $has_2fa;
+    /** @var UserProfile */
     private $profile;
 
     public static function fromArray(array $input): User
@@ -194,5 +195,13 @@ class User
     public function getHas2fa()
     {
         return $this->has_2fa;
+    }
+
+    /**
+     * @return UserProfile
+     */
+    public function getProfile(): UserProfile
+    {
+        return $this->profile;
     }
 }
