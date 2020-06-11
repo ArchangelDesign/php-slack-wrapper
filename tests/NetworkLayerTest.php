@@ -43,5 +43,8 @@ class NetworkLayerTest extends TestCase
         $this->assertIsArray($res['message']);
         $this->assertEquals('message', $res['message']['type']);
         $this->assertEquals('The message', $res['message']['text']);
+        $this->assertNotEmpty($res['ts']);
+        $ts = $res['ts'];
+        $slack->postMessage($channels[3], Message::responseMessage('The response', 'test', $ts));
     }
 }

@@ -16,11 +16,21 @@ class Message
 
     private $username;
 
-    public static function simpleMessage(string $text, string $username)
+    public static function simpleMessage(string $text, string $username): Message
     {
         $i = new static();
         $i->text = $text;
         $i->username = $username;
+
+        return $i;
+    }
+
+    public static function responseMessage(string $text, string $username, $threadTs): Message
+    {
+        $i = new static();
+        $i->text = $text;
+        $i->username = $username;
+        $i->threadTs = $threadTs;
 
         return $i;
     }

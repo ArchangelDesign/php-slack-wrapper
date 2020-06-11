@@ -9,6 +9,8 @@ namespace RaffMartinez\Slack;
 class Slack extends SlackNetworkClient
 {
 
+    private $lastTs = null;
+
     public function __construct(string $apiKey)
     {
         $this->apiKey = $apiKey;
@@ -36,7 +38,10 @@ class Slack extends SlackNetworkClient
     public function postMessage(Channel $channel, Message $message) {
         $args = $message->getMessage();
         $args['channel'] = $channel->getId();
-        return $this->post('chat.postMessage', $args);
+        $response = $this->post('chat.postMessage', $args);
+        $this->lastTs = $response['ts'];
+
+        return $response;
     }
 
     /**
@@ -48,7 +53,7 @@ class Slack extends SlackNetworkClient
     }
 
     /**
-     * @return string|null
+     * @return array|null
      */
     public function getLastResponseBody(): ?array
     {
@@ -63,5 +68,8 @@ class Slack extends SlackNetworkClient
         return $this->lastResponseHeaders;
     }
 
-
+    public function getLastMessageTs()
+    {
+        return $this->lastTs;
+    }
 }

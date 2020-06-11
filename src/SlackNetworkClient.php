@@ -25,7 +25,7 @@ abstract class SlackNetworkClient
     protected $lastResponseCode;
 
     /**
-     * @var null|String
+     * @var null|array
      */
     protected $lastResponseBody;
 
