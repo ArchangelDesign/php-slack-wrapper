@@ -70,7 +70,8 @@ abstract class SlackNetworkClient
 
     protected function post(string $endpoint, array $arguments)
     {
-        $response = $this->getClient()->post($endpoint, array_merge($arguments, $this->getRequestOptions()));
+        $response = $this->getClient()
+            ->post($endpoint, array_merge(['json' => $arguments], $this->getRequestOptions()));
 
         return $this->handleSlackResponse($response);
     }

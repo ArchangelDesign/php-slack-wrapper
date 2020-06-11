@@ -28,15 +28,20 @@ class NetworkLayerTest extends TestCase
     public function testBotsInfo()
     {
         $slack = new Slack(getenv('api-token'));
-        $slack->getBotsInfo('');
-        $this->markTestSkipped();
+        $response = $slack->getBotsInfo('');
+        $this->assertEquals(true, $response['ok']);
+        $this->markAsRisky();
     }
 
     public function testPostMessage()
     {
         $slack = new Slack(getenv('api-token'));
         $channels = $slack->getChannelList();
-        $res = $slack->postMessage($channels[2], Message::simpleMessage('The message', 'test'));
-        $this->markTestSkipped();
+        $res = $slack->postMessage($channels[3], Message::simpleMessage('The message', 'test'));
+        $this->assertIsArray($res);
+        $this->assertEquals(true, $res['ok']);
+        $this->assertIsArray($res['message']);
+        $this->assertEquals('message', $res['message']['type']);
+        $this->assertEquals('The message', $res['message']['text']);
     }
 }
