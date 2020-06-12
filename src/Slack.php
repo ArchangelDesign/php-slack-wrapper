@@ -24,6 +24,11 @@ class Slack extends SlackNetworkClient
         $this->apiKey = $apiKey;
     }
 
+    /**
+     * Returns array of Channel objects
+     *
+     * @return array
+     */
     public function getChannelList(): array {
         $channels = $this->get('conversations.list')['channels'];
         $response = [];
@@ -35,10 +40,19 @@ class Slack extends SlackNetworkClient
         return $response;
     }
 
+    /**
+     * @param string $botId
+     * @return mixed
+     */
     public function getBotsInfo(string $botId) {
         return $this->get('bots.info', ['bot_id' => $botId]);
     }
 
+    /**
+     * Returns array of User objects
+     *
+     * @return array
+     */
     public function getUserList() {
         $response = $this->get('users.list');
         $members = [];
@@ -49,24 +63,45 @@ class Slack extends SlackNetworkClient
         return $members;
     }
 
+    /**
+     * @param string $user
+     * @return User
+     */
     public function getUserInfo(string $user): User {
         $response = $this->get('users.info', ['user' => $user]);
 
         return User::fromArray($response['user']);
     }
 
-    public function getTeamInfo(string $team)
+    /**
+     * @param string $team
+     * @return Team
+     */
+    public function getTeamInfo(string $team): Team
     {
         $response = $this->get('team.info', ['team' => $team]);
 
         return Team::fromArray($response['team']);
     }
 
+    /**
+     * @param Channel $channel
+     * @param string $threadTs
+     * @return mixed
+     */
     public function deleteMessage(Channel $channel, string $threadTs)
     {
         return $this->post('chat.delete', ['channel' => $channel->getId(), 'ts' => $threadTs]);
     }
 
+    /**
+     * Posts message to a channel and returns full response from slack API
+     * as array. `ts` can be used to create threads
+     *
+     * @param Channel $channel
+     * @param Message $message
+     * @return mixed
+     */
     public function postMessage(Channel $channel, Message $message) {
         $args = $message->getMessage();
         $args['channel'] = $channel->getId();
@@ -74,6 +109,16 @@ class Slack extends SlackNetworkClient
         $this->lastTs = $response['ts'];
 
         return $response;
+    }
+
+    public function getTeamChannels()
+    {
+        return $this->get('conversations.list');
+    }
+
+    public function getCustomEmojis()
+    {
+        return $this->get('emoji.list');
     }
 
     /**
