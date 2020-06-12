@@ -3,7 +3,7 @@
 
 ### Usage:
 
-#### Initialize
+#### Initialize with legacy token (classic bot)
 ```php
 $legacyApiKey = 'xoxp-123456789-1234567890';
 $slack = new \RaffMartinez\Slack\Slack($legacyApiKey);
